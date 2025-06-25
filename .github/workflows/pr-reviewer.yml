@@ -1,0 +1,14 @@
+name: PR Reviewer
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign reviewers
+        uses: ahmadnassri/action-auto-assign-reviewers@v2.0.0
+        with:
+          reviewers: user1,user2 

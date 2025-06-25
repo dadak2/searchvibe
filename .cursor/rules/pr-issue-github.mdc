@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# PR 및 이슈 관리 룰 (GitHub)
+
+## PR 관리
+- PR 생성 시 자동 템플릿 적용
+- PR 생성 시 자동 라벨 부여 (예: feature, bug, refactor 등)
+- PR 생성 시 자동 assign (작성자 또는 지정된 reviewer)
+- PR 생성 시 자동 코멘트 등록 (예: 리뷰 가이드, 체크리스트 등)
+- PR 생성 시 코드 리뷰어 자동 지정
+- main 브랜치로의 PR/Push 시 테스트 자동 실행
+
+## 이슈 관리
+- 이슈 생성 시 자동 템플릿 적용
+- 이슈 생성 시 자동 라벨 부여 (예: bug, enhancement, question 등)
+- 이슈 생성 시 자동 assign (작성자 또는 지정된 담당자)
+- 이슈 생성 시 자동 코멘트 등록 (예: triage 안내, 답변 예상 시간 등)
+
+## 자동화 정책
+- 모든 자동화는 GitHub Actions 및 공식/검증된 오픈소스 액션을 우선 사용
+- 워크플로우 파일은 .github/workflows/에 위치
+- 라벨, assign, 코멘트 등은 프로젝트 정책에 맞게 커스터마이즈
+
