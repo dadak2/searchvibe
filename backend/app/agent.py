@@ -62,7 +62,4 @@ def search_products(query: Optional[str]) -> str:
             return "검색 결과를 가져올 수 없습니다."
             
     except Exception as e:
-        return f"검색 중 오류가 발생했습니다: {str(e)}"
-
-# 버그 삽입: 0으로 나누기
-_ = 1 / 0 
+        return f"검색 중 오류가 발생했습니다: {str(e)}" 
