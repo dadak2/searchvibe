@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 웹검색 MCP 연동 개발 계획
+
+## 구현 항목
+- 기존 랭체인 웹검색 툴 제거 및 MCP 기반 웹검색 툴(Naver Search MCP, Exa Search MCP) 연동
+- MultiServerMCPClient를 통한 MCP 툴 연결 및 도구 리스트 관리
+- .env 파일에 MCP 서버 URL 환경변수 추가
+- context7 기반 MCP 연동 구조 적용
+
+## 기술 스택 및 라이브러리
+- Python
+- LangGraph
+- langchain_mcp_adapters (MultiServerMCPClient)
+- context7 MCP
+
+## 개발 계획 (기능명 중심)
+1. .env에 NAVER_MCP_URL, EXA_MCP_URL 환경변수 추가
+2. MultiServerMCPClient로 Naver/Exa MCP 연결 구조 설계
+3. MCP 툴 리스트를 LangGraph Agent에 통합
+4. 기존 DuckDuckGo 등 웹검색 툴 제거
+5. MCP 기반 웹검색 툴로 검색 기능 교체
+6. context7 기반 프롬프트/도구 관리 구조 적용
+7. 테스트 및 통합 검증
+

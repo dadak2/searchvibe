@@ -14,8 +14,8 @@ st.set_page_config(
 BACKEND_URL = "http://localhost:8000/chat/"
 REQUEST_TIMEOUT = 5 if os.getenv("STREAMLIT_TESTING") else 30  # 테스트 환경에서는 짧은 타임아웃
 
-def call_backend_api(message: str) -> str:
-    """백엔드 API 호출 함수"""
+def call_backend_api(message: str) -> dict:
+    """백엔드 API 호출 함수 (응답+툴명)"""
     try:
         with st.spinner("AI가 상품을 검색 중입니다..."):
             response = requests.post(
@@ -23,21 +23,18 @@ def call_backend_api(message: str) -> str:
                 json={"message": message},
                 timeout=REQUEST_TIMEOUT
             )
-            
             if response.status_code == 200:
-                response_data = response.json()
-                return response_data.get("response", "응답을 받을 수 없습니다.")
+                return response.json()
             else:
-                return f"서버 오류가 발생했습니다. (상태 코드: {response.status_code})"
-                
+                return {"response": f"서버 오류가 발생했습니다. (상태 코드: {response.status_code})", "tool_name": None}
     except requests.exceptions.ConnectionError:
-        return "백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요."
+        return {"response": "백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.", "tool_name": None}
     except requests.exceptions.Timeout:
-        return "요청 시간이 초과되었습니다. 다시 시도해주세요."
+        return {"response": "요청 시간이 초과되었습니다. 다시 시도해주세요.", "tool_name": None}
     except requests.exceptions.RequestException as e:
-        return f"요청 중 오류가 발생했습니다: {str(e)}"
+        return {"response": f"요청 중 오류가 발생했습니다: {str(e)}", "tool_name": None}
     except Exception as e:
-        return f"예상치 못한 오류가 발생했습니다: {str(e)}"
+        return {"response": f"예상치 못한 오류가 발생했습니다: {str(e)}", "tool_name": None}
 
 def display_response_with_stream(response: str):
     """응답을 스트리밍 방식으로 표시"""
@@ -82,7 +79,19 @@ if prompt := st.chat_input("상품에 대해 질문해주세요!"):
 
         # 어시스턴트 응답 생성 및 표시
         with st.chat_message("assistant"):
-            response = call_backend_api(prompt)
+            result = call_backend_api(prompt)
+            response = result.get("response", "응답을 받을 수 없습니다.")
+            tool_name = "알 수 없음"
+            if result and "metadata" in result and "tool" in result["metadata"]:
+                tool_name = result["metadata"]["tool"]
+            elif result and "messages" in result:
+                for msg in result["messages"]:
+                    # ToolMessage 타입만 name 속성 보장
+                    if type(msg).__name__ == "ToolMessage" and hasattr(msg, "name"):
+                        tool_name = msg.name
+            # 표가 포함된 응답 강조
+            if "|" in response:
+                st.markdown("<div style='margin: 8px 0 8px 0; font-weight: bold;'>쇼핑몰별 상품 정보</div>", unsafe_allow_html=True)
             # 스트리밍 효과로 응답 표시
             final_response = display_response_with_stream(response)
             

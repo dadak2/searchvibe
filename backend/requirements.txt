@@ -10,3 +10,7 @@ langchain-community
 langchain-google-genai
 langsmith
 duckduckgo-search
+langchain_mcp_adapters
+langchain-core
+langchain-anthropic
+langchain-openai
